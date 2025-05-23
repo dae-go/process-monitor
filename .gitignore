@@ -1,0 +1,27 @@
+# Binaries
+process-monitor
+process-monitor.exe
+*.exe
+
+# Build artifacts
+build/
+dist/
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+vendor/
+
+# Test coverage
+coverage.out
