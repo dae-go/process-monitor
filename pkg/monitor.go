@@ -1,3 +1,13 @@
+package pkg
+
+import (
+	"context"
+	"fmt"
+	"os"
+	"os/exec"
+	"time"
+)
+
 // monitorProcess handles the lifecycle of a single process
 func (pm *ProcessMonitor) monitorProcess(name string, proc *ProcessInfo) {
 	defer pm.wg.Done()

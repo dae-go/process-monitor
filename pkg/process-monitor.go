@@ -1,9 +1,17 @@
+package pkg
+
 import (
 	"bufio"
+	"context"
+	"fmt"
+	"io/ioutil"
 	"net"
 	"net/http"
+	"os"
+	"os/exec"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // checkResourceUsage monitors CPU and memory usage of all processes
