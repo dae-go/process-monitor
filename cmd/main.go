@@ -10,7 +10,7 @@ import (
 	"text/tabwriter"
 	"time"
 
-	pm "github.com/dae-go/process-monitor/v3/pkg"
+	pm "github.com/dae-go/process-monitor/pkg"
 )
 
 func main() {
