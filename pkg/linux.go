@@ -6,7 +6,6 @@ package pm
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/user"
 	"strconv"
@@ -43,7 +42,7 @@ func newPlatformMonitor() (ProcessMonitor, error) {
 
 // GetProcesses returns all running processes
 func (m *linuxMonitor) GetProcesses() ([]Process, error) {
-	entries, err := ioutil.ReadDir("/proc")
+	entries, err := os.ReadDir("/proc")
 	if err != nil {
 		return nil, fmt.Errorf("failed to read /proc: %w", err)
 	}
@@ -145,7 +144,7 @@ func (m *linuxMonitor) readProcessInfo(pid int) (*Process, cpuStats, error) {
 
 	// Read stat file
 	statPath := fmt.Sprintf("/proc/%d/stat", pid)
-	statData, err := ioutil.ReadFile(statPath)
+	statData, err := os.ReadFile(statPath)
 	if err != nil {
 		return nil, stats, err
 	}
@@ -193,7 +192,7 @@ func (m *linuxMonitor) readProcessInfo(pid int) (*Process, cpuStats, error) {
 
 	// Read status for additional info
 	statusPath := fmt.Sprintf("/proc/%d/status", pid)
-	statusData, err := ioutil.ReadFile(statusPath)
+	statusData, err := os.ReadFile(statusPath)
 	if err == nil {
 		scanner := bufio.NewScanner(strings.NewReader(string(statusData)))
 		for scanner.Scan() {
@@ -216,7 +215,7 @@ func (m *linuxMonitor) readProcessInfo(pid int) (*Process, cpuStats, error) {
 
 	// Read cmdline
 	cmdlinePath := fmt.Sprintf("/proc/%d/cmdline", pid)
-	cmdlineData, err := ioutil.ReadFile(cmdlinePath)
+	cmdlineData, err := os.ReadFile(cmdlinePath)
 	if err == nil {
 		proc.Command = strings.ReplaceAll(string(cmdlineData), "\x00", " ")
 		proc.Command = strings.TrimSpace(proc.Command)
@@ -236,7 +235,7 @@ func (m *linuxMonitor) readProcessInfo(pid int) (*Process, cpuStats, error) {
 
 // readMemInfo reads /proc/meminfo and returns a map of values
 func (m *linuxMonitor) readMemInfo() (map[string]uint64, error) {
-	data, err := ioutil.ReadFile("/proc/meminfo")
+	data, err := os.ReadFile("/proc/meminfo")
 	if err != nil {
 		return nil, err
 	}
@@ -257,7 +256,7 @@ func (m *linuxMonitor) readMemInfo() (map[string]uint64, error) {
 
 // getTotalCPU reads total CPU jiffies from /proc/stat
 func (m *linuxMonitor) getTotalCPU() uint64 {
-	data, err := ioutil.ReadFile("/proc/stat")
+	data, err := os.ReadFile("/proc/stat")
 	if err != nil {
 		return 0
 	}
@@ -280,7 +279,7 @@ func (m *linuxMonitor) getTotalCPU() uint64 {
 
 // getSystemCPUUsage calculates overall system CPU usage
 func (m *linuxMonitor) getSystemCPUUsage() float64 {
-	data, err := ioutil.ReadFile("/proc/stat")
+	data, err := os.ReadFile("/proc/stat")
 	if err != nil {
 		return 0
 	}
@@ -312,7 +311,7 @@ func (m *linuxMonitor) getSystemCPUUsage() float64 {
 
 // getBootTime reads system boot time from /proc/stat
 func (m *linuxMonitor) getBootTime() uint64 {
-	data, err := ioutil.ReadFile("/proc/stat")
+	data, err := os.ReadFile("/proc/stat")
 	if err != nil {
 		return 0
 	}
@@ -330,7 +329,7 @@ func (m *linuxMonitor) getBootTime() uint64 {
 
 // getNumCPU returns the number of CPU cores
 func (m *linuxMonitor) getNumCPU() int {
-	data, err := ioutil.ReadFile("/proc/cpuinfo")
+	data, err := os.ReadFile("/proc/cpuinfo")
 	if err != nil {
 		return 1
 	}
